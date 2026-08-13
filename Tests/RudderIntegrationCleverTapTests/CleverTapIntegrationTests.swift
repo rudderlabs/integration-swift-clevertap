@@ -94,6 +94,26 @@ class CleverTapIntegrationTests {
         #expect(mockAdapter.setCredentialsCalls.isEmpty)
     }
 
+    @Test("given a CleverTap SDK that returns no instance, when create is called, then it throws")
+    func testCreateWhenSdkReturnsNoInstance() {
+        mockAdapter.returnsNoInstance = true
+
+        #expect(throws: CleverTapIntegrationError.sdkNotInitialized) {
+            try integration.create(destinationConfig: CleverTapTestData.validConfig)
+        }
+        #expect(integration.getDestinationInstance() == nil)
+    }
+
+    @Test("given a create call from a background queue, when create is called, then the SDK is initialized")
+    func testCreateFromBackgroundQueue() throws {
+        try DispatchQueue.global(qos: .default).sync {
+            try integration.create(destinationConfig: CleverTapTestData.validConfig)
+        }
+
+        #expect(mockAdapter.notifyApplicationLaunchedCallCount == 1)
+        #expect(integration.getDestinationInstance() != nil)
+    }
+
     @Test("given an initialized integration, when create is called again, then the SDK is not initialized twice")
     func testCreateIsIdempotent() throws {
         try setupWithDefaultConfig()

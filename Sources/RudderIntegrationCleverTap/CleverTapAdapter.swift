@@ -110,9 +110,14 @@ class DefaultCleverTapAdapter: CleverTapAdapter {
     }
 
     func notifyApplicationLaunched() {
-        let instance = CleverTap.sharedInstance()
-        instance?.notifyApplicationLaunched(withOptions: nil)
-        self.cleverTap = instance
+        // The CleverTap SDK reads UIScreen, UIDevice, and the application state here, and it can
+        // show an in-app message. All of that needs the main thread. The RudderStack SDK calls
+        // `create` from a background queue after it fetches the source configuration.
+        onMainThread {
+            let instance = CleverTap.sharedInstance()
+            instance?.notifyApplicationLaunched(withOptions: nil)
+            self.cleverTap = instance
+        }
     }
 
     func setDebugLevel(_ logLevel: LogLevel) {
@@ -137,6 +142,23 @@ class DefaultCleverTapAdapter: CleverTapAdapter {
 
     func getDestinationInstance() -> Any? {
         return cleverTap
+    }
+
+    /**
+     Runs the work on the main thread.
+
+     The method runs the work directly when the caller is already on the main thread. The
+     RudderStack SDK calls `create` on the caller thread when it holds a cached source
+     configuration, so an unguarded `DispatchQueue.main.sync` would deadlock.
+
+     - Parameter work: The work that needs the main thread.
+     */
+    private func onMainThread(_ work: () -> Void) {
+        if Thread.isMainThread {
+            work()
+        } else {
+            DispatchQueue.main.sync(execute: work)
+        }
     }
 
     /**

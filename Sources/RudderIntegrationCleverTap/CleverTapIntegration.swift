@@ -86,6 +86,13 @@ public class CleverTapIntegration: IntegrationPlugin, StandardIntegration {
         cleverTapAdapter.notifyApplicationLaunched()
         cleverTapAdapter.setDebugLevel(LoggerAnalytics.logLevel)
 
+        // CleverTap returns no instance when it rejects the credentials. Report the failure, so
+        // the SDK does not mark the destination ready and then drop every event.
+        guard cleverTapAdapter.getDestinationInstance() != nil else {
+            logger.error(log: "CleverTapIntegration: The CleverTap SDK returned no instance.", error: nil)
+            throw CleverTapIntegrationError.sdkNotInitialized
+        }
+
         logger.debug(log: "CleverTapIntegration: The CleverTap SDK is initialized.")
     }
 
@@ -213,10 +220,15 @@ enum CleverTapIntegrationError: LocalizedError {
     /// The account identifier or the account token is absent.
     case missingCredentials
 
+    /// The CleverTap SDK returned no instance.
+    case sdkNotInitialized
+
     var errorDescription: String? {
         switch self {
         case .missingCredentials:
             return "Missing accountId or accountToken"
+        case .sdkNotInitialized:
+            return "CleverTap SDK returned no instance"
         }
     }
 }

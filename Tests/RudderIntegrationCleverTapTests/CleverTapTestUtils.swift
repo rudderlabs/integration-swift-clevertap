@@ -25,6 +25,9 @@ class MockCleverTapAdapter: CleverTapAdapter {
     var recordEventCalls: [(event: String, properties: [String: Any]?)] = []
     var recordChargedEventCalls: [(details: [String: Any], items: [[String: Any]])] = []
 
+    /// When `true`, the adapter behaves like a CleverTap SDK that returns no instance.
+    var returnsNoInstance = false
+
     private var isInitialized = false
 
     // MARK: - CleverTapAdapter
@@ -39,7 +42,7 @@ class MockCleverTapAdapter: CleverTapAdapter {
 
     func notifyApplicationLaunched() {
         notifyApplicationLaunchedCallCount += 1
-        isInitialized = true
+        isInitialized = !returnsNoInstance
     }
 
     func setDebugLevel(_ logLevel: LogLevel) {
@@ -70,6 +73,7 @@ class MockCleverTapAdapter: CleverTapAdapter {
 
     func reset() {
         isInitialized = false
+        returnsNoInstance = false
         setCredentialsCalls.removeAll()
         notifyApplicationLaunchedCallCount = 0
         setDebugLevelCalls.removeAll()
