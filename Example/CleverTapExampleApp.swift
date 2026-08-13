@@ -52,26 +52,35 @@ extension AnalyticsManager {
     // MARK: - User Identity
 
     func identifyUser() {
+        // Send the birthday as a `yyyy-MM-dd` string. The SDK converts a `Date` trait to an
+        // ISO 8601 string, which CleverTap does not receive as a date of birth.
         let traits: [String: Any] = [
-            "email": "test.swift@integration-test.com",
-            "name": "Test User",
-            "phone": "0123456789",
-            "gender": "female",
-            "birthday": "1990-05-17",
-            "plan": "enterprise"
+            "name": "RudderStack iOS",
+            "email": "testuseriOS@example.com",
+            "phone": "+919876543210",
+            "gender": "M",
+            "birthday": "1992-05-24",
+            "Employed": "Y",
+            "Education": "Graduate",
+            "Married": "Y",
+            "Age": 28,
+            "Tz": "Asia/Kolkata",
+            "Photo": "www.foobar.com/image.jpeg",
+            "address": [
+                "city": "Kolkata",
+                "country": "India"
+            ],
+            "key-1": "value-1",
+            "key-2": 1234
         ]
 
-        analytics?.identify(userId: "test_user_ios_1", traits: traits)
+        analytics?.identify(userId: "rudderstack_ios_4", traits: traits)
         LoggerAnalytics.debug("Identified user with traits")
     }
 
-    func identifyUserWithNestedTraits() {
+    func identifyUserWithCompanyTraits() {
         let traits: [String: Any] = [
-            "email": "test.swift@integration-test.com",
-            "address": [
-                "city": "Bengaluru",
-                "country": "India"
-            ],
+            "email": "testuseriOS@example.com",
             "company": [
                 "id": "company-1",
                 "name": "RudderStack",
@@ -79,8 +88,8 @@ extension AnalyticsManager {
             ]
         ]
 
-        analytics?.identify(userId: "test_user_ios_2", traits: traits)
-        LoggerAnalytics.debug("Identified user with nested traits")
+        analytics?.identify(userId: "rudderstack_ios_5", traits: traits)
+        LoggerAnalytics.debug("Identified user with company traits")
     }
 
     // MARK: - Track Events
@@ -91,39 +100,105 @@ extension AnalyticsManager {
             "key_2": "value_2"
         ]
 
-        analytics?.track(name: "Custom Event", properties: properties)
-        LoggerAnalytics.debug("Tracked custom event with properties")
+        analytics?.track(name: "New Track event", properties: properties)
+        LoggerAnalytics.debug("Tracked event with properties")
     }
 
     func trackEventWithoutProperties() {
-        analytics?.track(name: "Simple Event")
-        LoggerAnalytics.debug("Tracked simple event")
+        analytics?.track(name: "New Track event")
+        LoggerAnalytics.debug("Tracked event without properties")
     }
 
-    func trackOrderCompleted() {
+    // MARK: - Order Completed Events
+
+    func orderCompletedWithoutProperties() {
+        analytics?.track(name: "Order Completed")
+        LoggerAnalytics.debug("Tracked Order Completed without properties")
+    }
+
+    func orderCompletedWithoutProducts() {
         let properties: [String: Any] = [
-            "order_id": "order-123",
-            "revenue": 99.99,
-            "currency": "USD",
-            "products": [
-                ["product_id": "product-1", "name": "Shoes", "price": 49.99],
-                ["product_id": "product-2", "name": "Socks", "price": 50.00]
-            ]
+            "revenue": 123,
+            "currency": "INR",
+            "Key-1": "Value-1"
         ]
 
         analytics?.track(name: "Order Completed", properties: properties)
-        LoggerAnalytics.debug("Tracked the Order Completed event")
+        LoggerAnalytics.debug("Tracked Order Completed without products")
+    }
+
+    func orderCompletedWithOrderId() {
+        let properties: [String: Any] = [
+            "revenue": 123,
+            "currency": "INR",
+            "Key-1": "Value-1",
+            "order_id": "1234567890"
+        ]
+
+        analytics?.track(name: "Order Completed", properties: properties)
+        LoggerAnalytics.debug("Tracked Order Completed with an order id")
+    }
+
+    func orderCompletedWithSingleProduct() {
+        let properties: [String: Any] = [
+            "products": [
+                [
+                    "product_id": "1001",
+                    "quantity": 11,
+                    "price": 100.11,
+                    "Product-Key-1": "Product-Value-1"
+                ]
+            ],
+            "revenue": 123,
+            "currency": "INR",
+            "Key-1": "Value-1"
+        ]
+
+        analytics?.track(name: "Order Completed", properties: properties)
+        LoggerAnalytics.debug("Tracked Order Completed with a single product")
+    }
+
+    func orderCompletedWithMultipleProducts() {
+        let properties: [String: Any] = [
+            "products": [
+                [
+                    "product_id": "1001",
+                    "quantity": 11,
+                    "price": 100.11,
+                    "Product-Key-1": "Product-Value-1"
+                ],
+                [
+                    "product_id": "1002",
+                    "quantity": 5,
+                    "price": 89.11,
+                    "Product-Key-2": "Product-Value-2"
+                ]
+            ],
+            "revenue": 123,
+            "currency": "INR",
+            "Key-1": "Value-1",
+            "order_id": "1234567890"
+        ]
+
+        analytics?.track(name: "Order Completed", properties: properties)
+        LoggerAnalytics.debug("Tracked Order Completed with multiple products")
     }
 
     // MARK: - Screen Events
 
-    func screenEvent() {
+    func screenEventWithProperties() {
         let properties: [String: Any] = [
-            "key_1": "value_1"
+            "key_1": "value_1",
+            "key_2": "value_2"
         ]
 
-        analytics?.screen(screenName: "Home Screen", properties: properties)
-        LoggerAnalytics.debug("Screen event sent")
+        analytics?.screen(screenName: "Home", properties: properties)
+        LoggerAnalytics.debug("Screen event sent with properties")
+    }
+
+    func screenEventWithoutProperties() {
+        analytics?.screen(screenName: "Home")
+        LoggerAnalytics.debug("Screen event sent without properties")
     }
 
     // MARK: - Reset

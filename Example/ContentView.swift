@@ -23,8 +23,8 @@ struct ContentView: View {
                         }
                         .buttonStyle(PrimaryButtonStyle())
 
-                        Button("Identify User (Nested Traits)") {
-                            analyticsManager.identifyUserWithNestedTraits()
+                        Button("Identify User (Company Traits)") {
+                            analyticsManager.identifyUserWithCompanyTraits()
                         }
                         .buttonStyle(SecondaryButtonStyle())
                     }
@@ -46,14 +46,43 @@ struct ContentView: View {
                             analyticsManager.trackEventWithoutProperties()
                         }
                         .buttonStyle(SecondaryButtonStyle())
+                    }
+                    .padding()
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(10)
 
-                        Button("Order Completed") {
-                            analyticsManager.trackOrderCompleted()
+                    // Order Completed Section
+                    VStack(spacing: 12) {
+                        Text("Order Completed")
+                            .font(.headline)
+
+                        Button("No Properties") {
+                            analyticsManager.orderCompletedWithoutProperties()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("No Products") {
+                            analyticsManager.orderCompletedWithoutProducts()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("With Order Id") {
+                            analyticsManager.orderCompletedWithOrderId()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Single Product") {
+                            analyticsManager.orderCompletedWithSingleProduct()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Multiple Products") {
+                            analyticsManager.orderCompletedWithMultipleProducts()
                         }
                         .buttonStyle(SecondaryButtonStyle())
                     }
                     .padding()
-                    .background(Color.blue.opacity(0.1))
+                    .background(Color.orange.opacity(0.1))
                     .cornerRadius(10)
 
                     // Screen Events Section
@@ -61,8 +90,13 @@ struct ContentView: View {
                         Text("Screen Events")
                             .font(.headline)
 
-                        Button("Screen Event") {
-                            analyticsManager.screenEvent()
+                        Button("Screen (With Properties)") {
+                            analyticsManager.screenEventWithProperties()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Screen (No Properties)") {
+                            analyticsManager.screenEventWithoutProperties()
                         }
                         .buttonStyle(SecondaryButtonStyle())
                     }
