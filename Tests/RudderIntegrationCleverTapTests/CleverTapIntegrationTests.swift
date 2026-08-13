@@ -104,12 +104,20 @@ class CleverTapIntegrationTests {
         #expect(integration.getDestinationInstance() == nil)
     }
 
-    @Test("given a create call from a background queue, when create is called, then the SDK is initialized")
-    func testCreateFromBackgroundQueue() throws {
-        try DispatchQueue.global(qos: .default).sync {
-            try integration.create(destinationConfig: CleverTapTestData.validConfig)
+    @Test("given a create call from a background thread, when create is called, then the SDK is initialized")
+    func testCreateFromBackgroundThread() async {
+        // `DispatchQueue.global().sync` can run on the calling thread, so use `async` to make sure
+        // `create` really starts off the main thread. `MainThreadTests` covers the thread hop that
+        // the real adapter performs; the mock adapter cannot show it.
+        let startedOffMainThread: Bool = await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .default).async {
+                let offMainThread = !Thread.isMainThread
+                try? self.integration.create(destinationConfig: CleverTapTestData.validConfig)
+                continuation.resume(returning: offMainThread)
+            }
         }
 
+        #expect(startedOffMainThread)
         #expect(mockAdapter.notifyApplicationLaunchedCallCount == 1)
         #expect(integration.getDestinationInstance() != nil)
     }
