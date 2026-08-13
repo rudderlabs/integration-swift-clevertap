@@ -29,6 +29,23 @@ enum CleverTapConstants {
     static let screenEventPrefix = "Screen Viewed: "
 }
 
+// MARK: - ChargedEvent
+
+/**
+ The parts of a CleverTap charged event.
+ */
+struct ChargedEvent {
+
+    /// The charge details.
+    let details: [String: Any]
+
+    /// The purchased items.
+    let items: [[String: Any]]
+
+    /// The revenue value that CleverTap cannot receive as an amount, or `nil` when the value is valid.
+    let invalidRevenue: Any?
+}
+
 // MARK: - CleverTapUtils
 
 /**
@@ -117,11 +134,12 @@ enum CleverTapUtils {
      Builds the charge details and the item list of a CleverTap charged event.
 
      - Parameter properties: The `Order Completed` event properties.
-     - Returns: The charge details and the purchased items.
+     - Returns: The charge details, the purchased items, and the revenue value that is not a number.
      */
-    static func buildChargedEvent(from properties: [String: Any]) -> (details: [String: Any], items: [[String: Any]]) {
+    static func buildChargedEvent(from properties: [String: Any]) -> ChargedEvent {
         var details: [String: Any] = [:]
         var items: [[String: Any]] = []
+        var invalidRevenue: Any?
 
         for (key, value) in properties {
             if key == productsKey {
@@ -140,13 +158,32 @@ enum CleverTapUtils {
             case orderIdKey:
                 details[chargedIdKey] = value
             case revenueKey:
-                details[amountKey] = value
+                // CleverTap expects a number for the amount. A string amount creates a bad record,
+                // so drop the value instead and let the caller report it.
+                if let amount = chargedAmount(from: value) {
+                    details[amountKey] = amount
+                } else {
+                    invalidRevenue = value
+                }
             default:
                 details[key] = value
             }
         }
 
-        return (details, items)
+        return ChargedEvent(details: details, items: items, invalidRevenue: invalidRevenue)
+    }
+
+    /**
+     Reads the revenue as a number.
+
+     - Parameter value: The revenue value from the event properties.
+     - Returns: The number, or `nil` when the value is not a number.
+     */
+    private static func chargedAmount(from value: Any) -> Any? {
+        if value is Bool { return nil }
+        if value is NSNumber { return value }
+        if let text = value as? String, let number = Double(text) { return number }
+        return nil
     }
 
     /**

@@ -23,8 +23,28 @@ struct ContentView: View {
                         }
                         .buttonStyle(PrimaryButtonStyle())
 
-                        Button("Identify User (Company Traits)") {
+                        Button("Identify (User Id Only)") {
+                            analyticsManager.identifyUserIdOnly()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Identify (Company Traits)") {
                             analyticsManager.identifyUserWithCompanyTraits()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Identify (Female Gender)") {
+                            analyticsManager.identifyUserWithFemaleGender()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Identify (Birthday Out Of Range)") {
+                            analyticsManager.identifyUserWithOutOfRangeBirthday()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Identify (Birthday Malformed)") {
+                            analyticsManager.identifyUserWithMalformedBirthday()
                         }
                         .buttonStyle(SecondaryButtonStyle())
                     }
@@ -44,6 +64,11 @@ struct ContentView: View {
 
                         Button("Track (No Properties)") {
                             analyticsManager.trackEventWithoutProperties()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Track (Nested Properties)") {
+                            analyticsManager.trackEventWithNestedProperties()
                         }
                         .buttonStyle(SecondaryButtonStyle())
                     }
@@ -76,8 +101,18 @@ struct ContentView: View {
                         }
                         .buttonStyle(SecondaryButtonStyle())
 
+                        Button("Single Product + Order Id") {
+                            analyticsManager.orderCompletedWithSingleProductAndOrderId()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
                         Button("Multiple Products") {
                             analyticsManager.orderCompletedWithMultipleProducts()
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+
+                        Button("Non Numeric Revenue") {
+                            analyticsManager.orderCompletedWithNonNumericRevenue()
                         }
                         .buttonStyle(SecondaryButtonStyle())
                     }

@@ -146,6 +146,18 @@ class CleverTapIntegrationTests {
         #expect(mockAdapter.onUserLoginCalls[0]["Email"] as? String == "test@example.com")
     }
 
+    @Test("given an identify event without traits, when identify is called, then only the Identity is set")
+    func testIdentifyWithUserIdOnly() throws {
+        try setupWithDefaultConfig()
+        let event = CleverTapTestData.createIdentifyEvent(userId: "test_user_123")
+
+        integration.identify(payload: event)
+
+        let profile = try #require(mockAdapter.onUserLoginCalls.first)
+        #expect(profile.count == 1)
+        #expect(profile["Identity"] as? String == "test_user_123")
+    }
+
     @Test("given an identify event with standard traits, when identify is called, then the traits are mapped")
     func testIdentifyWithStandardTraits() throws {
         try setupWithDefaultConfig()
@@ -240,6 +252,28 @@ class CleverTapIntegrationTests {
         #expect(charged.items.count == 2)
         #expect(charged.items[0]["id"] as? String == "product-1")
         #expect(charged.items[0]["product_id"] == nil)
+    }
+
+    @Test("given an Order Completed event with a non numeric revenue, when track is called, then the amount is dropped")
+    func testTrackOrderCompletedWithNonNumericRevenue() throws {
+        try setupWithDefaultConfig()
+        let event = CleverTapTestData.createTrackEvent(
+            name: "Order Completed",
+            properties: [
+                "revenue": "not-a-number",
+                "currency": "INR",
+                "order_id": "invalid-revenue-1"
+            ]
+        )
+
+        integration.track(payload: event)
+
+        #expect(mockAdapter.recordChargedEventCalls.count == 1)
+
+        let charged = try #require(mockAdapter.recordChargedEventCalls.first)
+        #expect(charged.details["Amount"] == nil)
+        #expect(charged.details["Charged ID"] as? String == "invalid-revenue-1")
+        #expect(charged.details["currency"] as? String == "INR")
     }
 
     @Test("given an Order Completed event without properties, when track is called, then nothing is recorded")

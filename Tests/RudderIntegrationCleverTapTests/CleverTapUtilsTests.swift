@@ -79,9 +79,12 @@ struct CleverTapUtilsTests {
         #expect(profile["DOB"] as? Date == birthday)
     }
 
-    @Test("given an unparsable birthday, when buildProfile is called, then no DOB is set")
-    func testProfileInvalidBirthday() {
-        let profile = CleverTapUtils.buildProfile(userId: nil, traits: ["birthday": "17/05/1990"])
+    @Test(
+        "given an unparsable birthday, when buildProfile is called, then no DOB is set",
+        arguments: ["17/05/1990", "01/02/1990", "1990-13-45", "1990-02-30", "not-a-date", ""]
+    )
+    func testProfileInvalidBirthday(_ birthday: String) {
+        let profile = CleverTapUtils.buildProfile(userId: nil, traits: ["birthday": birthday])
 
         #expect(profile["DOB"] == nil)
         #expect(profile["birthday"] == nil)
@@ -142,6 +145,44 @@ struct CleverTapUtilsTests {
         #expect(result.details["order_id"] == nil)
         #expect(result.details["revenue"] == nil)
         #expect(result.items.isEmpty)
+        #expect(result.invalidRevenue == nil)
+    }
+
+    @Test("given an integer revenue, when buildChargedEvent is called, then the amount keeps its type")
+    func testChargedEventIntegerRevenue() {
+        let result = CleverTapUtils.buildChargedEvent(from: ["revenue": 123])
+
+        #expect(result.details["Amount"] as? Int == 123)
+        #expect(result.invalidRevenue == nil)
+    }
+
+    @Test("given a numeric string revenue, when buildChargedEvent is called, then the amount is a number")
+    func testChargedEventNumericStringRevenue() {
+        let result = CleverTapUtils.buildChargedEvent(from: ["revenue": "123.45"])
+
+        #expect(result.details["Amount"] as? Double == 123.45)
+        #expect(result.invalidRevenue == nil)
+    }
+
+    @Test("given a non numeric revenue, when buildChargedEvent is called, then the amount is dropped")
+    func testChargedEventNonNumericRevenue() {
+        let result = CleverTapUtils.buildChargedEvent(from: [
+            "revenue": "not-a-number",
+            "order_id": "order-1"
+        ])
+
+        #expect(result.details["Amount"] == nil)
+        #expect(result.details["revenue"] == nil)
+        #expect(result.details["Charged ID"] as? String == "order-1")
+        #expect(result.invalidRevenue as? String == "not-a-number")
+    }
+
+    @Test("given a boolean revenue, when buildChargedEvent is called, then the amount is dropped")
+    func testChargedEventBooleanRevenue() {
+        let result = CleverTapUtils.buildChargedEvent(from: ["revenue": true])
+
+        #expect(result.details["Amount"] == nil)
+        #expect(result.invalidRevenue as? Bool == true)
     }
 
     @Test("given nested properties, when buildChargedEvent is called, then they are dropped")

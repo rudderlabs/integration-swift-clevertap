@@ -172,6 +172,10 @@ public class CleverTapIntegration: IntegrationPlugin, StandardIntegration {
         }
 
         let chargedEvent = CleverTapUtils.buildChargedEvent(from: properties)
+        if let invalidRevenue = chargedEvent.invalidRevenue {
+            logger.warn(log: "CleverTapIntegration: Cannot read the revenue '\(invalidRevenue)' as a number. CleverTap does not receive the amount.")
+        }
+
         cleverTapAdapter.recordChargedEvent(details: chargedEvent.details, items: chargedEvent.items)
         logger.debug(log: "CleverTapIntegration: Recorded a charged event.")
     }

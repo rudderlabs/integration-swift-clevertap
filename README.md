@@ -65,8 +65,12 @@ The integration reports an error when the account identifier or the account toke
 | `identify` | Calls `onUserLogin`. The user identifier becomes the `Identity` attribute. |
 | `track` | Records a custom event with the event properties. |
 | `track("Order Completed")` | Records a charged event. `order_id` becomes `Charged ID`, and `revenue` becomes `Amount`. Each product becomes an item, and `product_id` becomes `id`. |
+| `track("Order Completed")` without properties | Sends nothing. CleverTap needs charge details. |
 | `screen` | Records a custom event with the name `Screen Viewed: <screen name>`. |
 | `reset` | No effect. CleverTap keeps the profile until the next user login. |
+
+The CleverTap SDK removes the characters `. : $ ' " \` from an event name. A screen event therefore
+arrives in the CleverTap dashboard as `Screen Viewed <screen name>`, without the colon.
 
 ### Trait mapping
 
@@ -82,6 +86,18 @@ The integration reports an error when the account identifier or the account toke
 
 CleverTap accepts primitive values, dates, and string arrays. The integration drops every other
 nested trait.
+
+### Revenue
+
+CleverTap needs a number for the `Amount` attribute. When `revenue` is not a number, the
+integration drops the amount and logs a warning. It keeps the other charge details. A numeric
+string such as `"123.45"` is valid, and CleverTap receives it as a number.
+
+### Nested values
+
+The integration sends the nested values of the `address` and the `company` traits as flat profile
+attributes. It drops every other nested trait, and it drops the nested values in the charge
+details of a charged event. Track and screen events keep their properties unchanged.
 
 ## Push notifications and in-app messages
 
