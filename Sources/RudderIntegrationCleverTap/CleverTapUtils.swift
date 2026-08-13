@@ -83,12 +83,24 @@ enum CleverTapUtils {
     private static let chargedIdKey = "Charged ID"
     private static let amountKey = "Amount"
 
-    /// The date format that CleverTap expects for the date of birth.
+    /// The date format that a birthday trait normally uses.
     private static let birthdayFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
+    }()
+
+    /// The ISO 8601 formats that a birthday trait can use. The SDK converts a `Date` trait to an
+    /// ISO 8601 string with fractional seconds before the integration reads it.
+    private static let isoBirthdayFormatters: [ISO8601DateFormatter] = {
+        let withFractionalSeconds = ISO8601DateFormatter()
+        withFractionalSeconds.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let withoutFractionalSeconds = ISO8601DateFormatter()
+        withoutFractionalSeconds.formatOptions = [.withInternetDateTime]
+
+        return [withFractionalSeconds, withoutFractionalSeconds]
     }()
 
     /**
@@ -235,13 +247,36 @@ enum CleverTapUtils {
     private static func addBirthday(from traits: inout [String: Any], to profile: inout [String: Any]) {
         if let birthday = traits[birthdayTrait] as? String {
             traits.removeValue(forKey: birthdayTrait)
-            if let date = birthdayFormatter.date(from: birthday) {
+            if let date = birthdayDate(from: birthday) {
                 profile[birthdayKey] = date
             }
         } else if let birthday = traits[birthdayTrait] as? Date {
             traits.removeValue(forKey: birthdayTrait)
             profile[birthdayKey] = birthday
         }
+    }
+
+    /**
+     Reads a birthday string as a date.
+
+     The method accepts the `yyyy-MM-dd` format, and the ISO 8601 format that the SDK produces
+     when the app sends a `Date` trait.
+
+     - Parameter text: The birthday value from the traits.
+     - Returns: The date, or `nil` when no supported format matches.
+     */
+    private static func birthdayDate(from text: String) -> Date? {
+        if let date = birthdayFormatter.date(from: text) {
+            return date
+        }
+
+        for formatter in isoBirthdayFormatters {
+            if let date = formatter.date(from: text) {
+                return date
+            }
+        }
+
+        return nil
     }
 
     /**

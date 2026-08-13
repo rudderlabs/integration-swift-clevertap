@@ -71,6 +71,18 @@ struct CleverTapUtilsTests {
         #expect(profile["birthday"] == nil)
     }
 
+    @Test(
+        "given an ISO 8601 birthday, when buildProfile is called, then the DOB is that instant",
+        arguments: ["1992-05-24T00:00:00.000Z", "1992-05-24T00:00:00Z"]
+    )
+    func testProfileIsoBirthday(_ birthday: String) throws {
+        let profile = CleverTapUtils.buildProfile(userId: nil, traits: ["birthday": birthday])
+
+        let dob = try #require(profile["DOB"] as? Date)
+        #expect(dob == Date(timeIntervalSince1970: 706_665_600))
+        #expect(profile["birthday"] == nil)
+    }
+
     @Test("given a birthday date, when buildProfile is called, then the DOB is the same date")
     func testProfileBirthdayDate() {
         let birthday = Date(timeIntervalSince1970: 643_000_000)

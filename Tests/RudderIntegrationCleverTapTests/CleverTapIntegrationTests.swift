@@ -197,6 +197,48 @@ class CleverTapIntegrationTests {
         #expect(profile["Gender"] as? String == "F")
     }
 
+    @Test("given an identify event with a Date birthday, when identify is called, then the DOB is set")
+    func testIdentifyWithDateBirthday() throws {
+        try setupWithDefaultConfig()
+        // 1992-05-24T00:00:00Z. The SDK converts a Date trait to an ISO 8601 string before the
+        // integration reads it, so this exercises the ISO 8601 path through the public API.
+        let birthday = Date(timeIntervalSince1970: 706_665_600)
+        let event = CleverTapTestData.createIdentifyEvent(traits: ["birthday": birthday])
+
+        integration.identify(payload: event)
+
+        let profile = try #require(mockAdapter.onUserLoginCalls.first)
+        #expect(profile["DOB"] as? Date == birthday)
+        #expect(profile["birthday"] == nil)
+    }
+
+    @Test("given an identify event with a yyyy-MM-dd birthday, when identify is called, then the DOB is set")
+    func testIdentifyWithStringBirthday() throws {
+        try setupWithDefaultConfig()
+        let event = CleverTapTestData.createIdentifyEvent(traits: ["birthday": "1992-05-24"])
+
+        integration.identify(payload: event)
+
+        let profile = try #require(mockAdapter.onUserLoginCalls.first)
+        let dob = try #require(profile["DOB"] as? Date)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
+        let components = calendar.dateComponents([.year, .month, .day], from: dob)
+        #expect(components.year == 1992)
+    }
+
+    @Test("given an identify event with an invalid birthday, when identify is called, then no DOB is set")
+    func testIdentifyWithInvalidBirthday() throws {
+        try setupWithDefaultConfig()
+        let event = CleverTapTestData.createIdentifyEvent(traits: ["birthday": "1990-13-45"])
+
+        integration.identify(payload: event)
+
+        let profile = try #require(mockAdapter.onUserLoginCalls.first)
+        #expect(profile["DOB"] == nil)
+        #expect(profile["birthday"] == nil)
+    }
+
     @Test("given an identify event with custom traits, when identify is called, then the traits are forwarded")
     func testIdentifyWithCustomTraits() throws {
         try setupWithDefaultConfig()

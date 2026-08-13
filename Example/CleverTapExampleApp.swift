@@ -52,8 +52,7 @@ extension AnalyticsManager {
     // MARK: - User Identity
 
     func identifyUser() {
-        // Send the birthday as a `yyyy-MM-dd` string. The SDK converts a `Date` trait to an
-        // ISO 8601 string, which CleverTap does not receive as a date of birth.
+        // The birthday accepts a `Date`, a `yyyy-MM-dd` string, or an ISO 8601 string.
         let traits: [String: Any] = [
             "name": "RudderStack iOS",
             "email": "testuseriOS@example.com",

@@ -81,7 +81,7 @@ arrives in the CleverTap dashboard as `Screen Viewed <screen name>`, without the
 | `name` | `Name` |
 | `phone` | `Phone` |
 | `gender` | `Gender` (`M` or `F`) |
-| `birthday` | `DOB`. Send the date in the `yyyy-MM-dd` format. |
+| `birthday` | `DOB`. Send a `Date`, or a string in the `yyyy-MM-dd` or the ISO 8601 format. |
 | `address` / `company` | The nested values become flat attributes. The nested `id` becomes `companyId`, and the nested `name` becomes `companyName`. |
 
 CleverTap accepts primitive values, dates, and string arrays. The integration drops every other
