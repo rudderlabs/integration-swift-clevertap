@@ -120,4 +120,4 @@ For more information, see the [RudderStack documentation](https://www.rudderstac
 
 ## License
 
-Elastic License 2.0 (ELv2) - see [LICENSE.md](LICENSE.md) for details.
+MIT License - see [LICENSE.md](LICENSE.md) for details.
