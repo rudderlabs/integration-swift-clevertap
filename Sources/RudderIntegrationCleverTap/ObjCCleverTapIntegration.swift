@@ -42,9 +42,9 @@ public class ObjCCleverTapIntegration: NSObject, ObjCIntegrationPlugin, ObjCStan
         set { cleverTapIntegration.key = newValue }
     }
 
-    // MARK: - Private Properties
+    // MARK: - Internal Properties
 
-    private let cleverTapIntegration: CleverTapIntegration
+    let cleverTapIntegration: CleverTapIntegration
 
     // MARK: - Initializers
 
@@ -57,6 +57,18 @@ public class ObjCCleverTapIntegration: NSObject, ObjCIntegrationPlugin, ObjCStan
     public override init() {
         self.cleverTapIntegration = CleverTapIntegration()
         super.init()
+    }
+
+    // MARK: - ObjCPlugin Methods
+
+    /**
+     Gives the analytics client to the wrapped integration.
+
+     - Parameter analytics: The Objective-C analytics client.
+     */
+    @objc
+    public func setup(_ analytics: ObjCAnalytics) {
+        cleverTapIntegration.analytics = analytics.analytics
     }
 
     // MARK: - ObjCIntegrationPlugin Methods
