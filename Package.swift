@@ -17,7 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/CleverTap/clevertap-ios-sdk.git", .upToNextMajor(from: "7.8.1")),
-        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", .upToNextMajor(from: "1.0.0"))
+        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", .upToNextMajor(from: "1.3.1"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
