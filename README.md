@@ -1,3 +1,12 @@
+<p align="center">
+  <a href="https://rudderstack.com/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://cdn.rudderlabs.com/brand/logo_watermark_dark.png">
+      <img alt="RudderStack" width="512" src="https://cdn.rudderlabs.com/brand/logo_watermark_light.png">
+    </picture>
+  </a>
+</p>
+
 # RudderIntegrationCleverTap
 
 RudderStack Swift SDK device mode integration for CleverTap.
