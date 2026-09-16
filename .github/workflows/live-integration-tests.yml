@@ -18,8 +18,12 @@
 
 name: Live Integration Tests
 
+# `pull_request_target`, not `pull_request`: this job holds the App key, and on `pull_request` the
+# workflow file comes from the pull request's own branch, so a branch here could rewrite this job and
+# read the key. The base branch's copy runs instead. Nothing checks out the pull request's code — the
+# head SHA is passed to the rig, which builds it in isolation.
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, synchronize]
     # What a consumer of this package builds. Tests, the example app and docs do not reach it.
     paths:
@@ -41,8 +45,9 @@ env:
 jobs:
   live:
     name: Device-mode live tests
-    # A fork gets no secrets, so it cannot mint the token that starts the rig. The check is not
-    # required, so a fork pull request simply has one fewer check.
+    # `pull_request_target` DOES give a fork's pull request the secrets, so this guard is what keeps
+    # the App key away from code nobody here wrote. The check is not required, so a fork pull request
+    # simply has one fewer check.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     # The rig caps itself at 45 minutes. This adds room for the macOS queue ahead of it.
@@ -103,10 +108,11 @@ jobs:
           echo "::notice::watching ${url}"
           echo "The live scenarios run in [${RIG_REPO} run ${run_id}](${url})." >> "$GITHUB_STEP_SUMMARY"
 
-          # 20-second poll for up to an hour. `gh run watch` would do this, but it streams the log
-          # of an internal repository into a public one's job output.
+          # 20-second poll for up to 50 minutes, which with the two-minute discovery above stays
+          # inside the App token's one-hour life. `gh run watch` would do this, but it streams the
+          # log of an internal repository into a public one's job output.
           conclusion=""
-          for _ in $(seq 1 180); do
+          for _ in $(seq 1 150); do
             state="$(gh api "repos/${RIG_REPO}/actions/runs/${run_id}" \
               --jq '"\(.status) \(.conclusion // "")"')"
             conclusion="${state#* }"
@@ -118,7 +124,7 @@ jobs:
             success)
               echo "::notice::the live scenarios passed — ${url}" ;;
             "")
-              echo "::error::the rig run did not finish within the hour. See ${url}"
+              echo "::error::the rig run did not finish within 50 minutes. See ${url}"
               exit 1 ;;
             *)
               echo "::error::the live scenarios reported '${conclusion}'. The report artifacts on"
