@@ -20,10 +20,11 @@ name: Live Integration Tests
 
 # `pull_request_target`, not `pull_request`: this job holds the App key, and on `pull_request` the
 # workflow file comes from the pull request's own branch, so a branch here could rewrite this job and
-# read the key. The base branch's copy runs instead. Nothing checks out the pull request's code — the
-# head SHA is passed to the rig, which builds it in isolation.
+# read the key. The base branch's copy runs instead. What makes that safe, and what the zizmor ignore
+# below stands on: this job checks out NO pull request code — it passes the head SHA to the rig — and
+# the fork guard below refuses any pull request from outside this repository.
 on:
-  pull_request_target:
+  pull_request_target:  # zizmor: ignore[dangerous-triggers]
     types: [opened, reopened, synchronize]
     # What a consumer of this package builds. Tests, the example app and docs do not reach it.
     paths:
