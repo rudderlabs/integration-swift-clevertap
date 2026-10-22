@@ -99,7 +99,14 @@ class DefaultCleverTapAdapter: CleverTapAdapter {
 
     private var cleverTap: CleverTap?
 
-    init() { /* Default initializer */ }
+    /**
+     Creates the adapter. With an instance, the adapter starts with the CleverTap instance that the app initialised.
+
+     - Parameter cleverTap: The CleverTap instance that the app initialised, or `nil` for standard mode.
+     */
+    init(cleverTap: CleverTap? = nil) {
+        self.cleverTap = cleverTap
+    }
 
     func setCredentials(accountId: String, token: String) {
         CleverTap.setCredentialsWithAccountID(accountId, andToken: token)

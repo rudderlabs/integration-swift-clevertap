@@ -30,6 +30,13 @@ class MockCleverTapAdapter: CleverTapAdapter {
 
     private var isInitialized = false
 
+    /// The instance that the app passed in lite mode, or `nil` in standard mode.
+    private let appInstance: Any?
+
+    init(appInstance: Any? = nil) {
+        self.appInstance = appInstance
+    }
+
     // MARK: - CleverTapAdapter
 
     func setCredentials(accountId: String, token: String) {
@@ -66,7 +73,7 @@ class MockCleverTapAdapter: CleverTapAdapter {
     }
 
     func getDestinationInstance() -> Any? {
-        return isInitialized ? "MockCleverTapInstance" : nil
+        return appInstance ?? (isInitialized ? "MockCleverTapInstance" : nil)
     }
 
     // MARK: - Helper

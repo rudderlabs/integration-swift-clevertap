@@ -55,6 +55,29 @@ RSSCleverTapIntegration *cleverTapIntegration = [[RSSCleverTapIntegration alloc]
 [analytics addPlugin:cleverTapIntegration];
 ```
 
+## Lite mode
+
+In lite mode, your app initialises CleverTap and passes the instance to the integration. The integration then only
+maps events and sends them to that instance.
+
+1. Set up CleverTap as CleverTap's iOS guide describes: the account credentials in `Info.plist`, and
+   `CleverTap.autoIntegrate()` in `application(_:didFinishLaunchingWithOptions:)`.
+2. Pass the CleverTap instance to the integration:
+
+```swift
+if let cleverTap = CleverTap.sharedInstance() {
+    analytics.add(plugin: CleverTapIntegration(cleverTap: cleverTap))
+}
+```
+
+In Objective-C, use `[[RSSCleverTapIntegration alloc] initWithCleverTap:cleverTap]`.
+
+In lite mode, the integration:
+
+- Does not set the CleverTap credentials or debug level, and does not notify CleverTap of the application launch.
+- Waits for the source config before it sends events. The dashboard credentials are not used, so they can hold any
+  value.
+
 ## Dashboard configuration
 
 Set these values in the CleverTap destination of the RudderStack dashboard:
