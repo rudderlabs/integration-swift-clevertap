@@ -5,6 +5,7 @@
 
 import Testing
 import Foundation
+import CleverTapSDK
 import RudderStackAnalytics
 @testable import RudderIntegrationCleverTap
 
@@ -405,5 +406,42 @@ class CleverTapIntegrationTests {
         #expect(mockAdapter.onUserLoginCalls.isEmpty)
         #expect(mockAdapter.recordEventCalls.isEmpty)
         #expect(mockAdapter.recordChargedEventCalls.isEmpty)
+    }
+
+    // MARK: - Lite Mode Tests
+
+    @Test("given an app's CleverTap instance and blank dashboard credentials, when create runs twice, then it does not throw and keeps the app's instance")
+    @MainActor
+    func testLiteCreateKeepsAppInstance() throws {
+        let appCleverTap = CleverTap.instance(with: CleverTapInstanceConfig(
+            accountId: CleverTapTestData.accountId,
+            accountToken: CleverTapTestData.accountToken
+        ))
+        let liteIntegration = CleverTapIntegration(cleverTap: appCleverTap)
+        liteIntegration.analytics = mockAnalytics
+
+        try liteIntegration.create(destinationConfig: CleverTapTestData.configWithEmptyAccountToken)
+        try liteIntegration.create(destinationConfig: CleverTapTestData.configWithEmptyAccountToken)
+
+        #expect(liteIntegration.getDestinationInstance() as? CleverTap === appCleverTap)
+    }
+
+    @Test("given an adapter that holds the app's instance, when create runs and events arrive, then CleverTap is not set up and the events reach the adapter")
+    func testLiteModeSkipsSetupAndForwardsEvents() throws {
+        let appAdapter = MockCleverTapAdapter(appInstance: "AppCleverTapInstance")
+        let liteIntegration = CleverTapIntegration(cleverTapAdapter: appAdapter)
+        liteIntegration.analytics = mockAnalytics
+
+        try liteIntegration.create(destinationConfig: CleverTapTestData.validConfig)
+        liteIntegration.identify(payload: CleverTapTestData.createIdentifyEvent())
+        liteIntegration.track(payload: CleverTapTestData.createTrackEvent(name: "Product Viewed", properties: ["key": "value"]))
+        liteIntegration.screen(payload: CleverTapTestData.createScreenEvent(name: "Home"))
+
+        #expect(appAdapter.setCredentialsCalls.isEmpty)
+        #expect(appAdapter.notifyApplicationLaunchedCallCount == 0)
+        #expect(appAdapter.setDebugLevelCalls.isEmpty)
+        #expect(liteIntegration.getDestinationInstance() as? String == "AppCleverTapInstance")
+        #expect(appAdapter.onUserLoginCalls.count == 1)
+        #expect(appAdapter.recordEventCalls.map(\.event) == ["Product Viewed", "Screen Viewed: Home"])
     }
 }

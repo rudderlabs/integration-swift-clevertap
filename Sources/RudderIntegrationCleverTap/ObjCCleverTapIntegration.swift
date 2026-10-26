@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CleverTapSDK
 import RudderStackAnalytics
 
 // MARK: - ObjCCleverTapIntegration
@@ -56,6 +57,18 @@ public class ObjCCleverTapIntegration: NSObject, ObjCIntegrationPlugin, ObjCStan
     @objc
     public override init() {
         self.cleverTapIntegration = CleverTapIntegration()
+        super.init()
+    }
+
+    /**
+     Initializes a new CleverTap integration instance in lite mode, with a CleverTap instance that the app has
+     already initialised.
+
+     - Parameter cleverTap: The CleverTap instance that the app initialised.
+     */
+    @objc
+    public init(cleverTap: CleverTap) {
+        self.cleverTapIntegration = CleverTapIntegration(cleverTap: cleverTap)
         super.init()
     }
 
