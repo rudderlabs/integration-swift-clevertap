@@ -18,13 +18,13 @@ RudderStack Swift SDK device mode integration for CleverTap.
 Add the following dependency to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/rudderlabs/integration-swift-clevertap.git", .upToNextMajor(from: "1.0.0"))
+.package(url: "https://github.com/rudderlabs/integration-swift-clevertap.git", .upToNextMajor(from: "<latest_version>"))
 ```
 
 Or add it via Xcode:
 1. Go to **File > Add Package Dependencies**
 2. Enter the repository URL: `https://github.com/rudderlabs/integration-swift-clevertap`
-3. Select **Up to Next Major Version** from `1.0.0`
+3. Select **Up to Next Major Version** from the latest release
 
 ## Usage
 
