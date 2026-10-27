@@ -5,6 +5,7 @@
 
 import Testing
 import Foundation
+import CleverTapSDK
 import RudderStackAnalytics
 @testable import RudderIntegrationCleverTap
 
@@ -39,5 +40,24 @@ struct ObjCCleverTapIntegrationTests {
 
         let propagated = try #require(wrapper.cleverTapIntegration.analytics)
         #expect(propagated === analytics)
+    }
+
+    // MARK: - Lite Mode Tests
+
+    @Test("given an app's CleverTap instance, when the lite wrapper creates with blank credentials, then it succeeds and returns the app's instance")
+    @MainActor
+    func testLiteWrapperKeepsAppInstance() {
+        let appCleverTap = CleverTap.instance(with: CleverTapInstanceConfig(
+            accountId: "test-account-id-123",
+            accountToken: "test-account-token-456"
+        ))
+        let wrapper = ObjCCleverTapIntegration(cleverTap: appCleverTap)
+        var error: NSError?
+
+        let created = wrapper.createWithDestinationConfig(["accountId": "", "accountToken": ""], error: &error)
+
+        #expect(created == true)
+        #expect(error == nil)
+        #expect(wrapper.getDestinationInstance() as? CleverTap === appCleverTap)
     }
 }

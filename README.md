@@ -1,3 +1,12 @@
+<p align="center">
+  <a href="https://rudderstack.com/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://cdn.rudderlabs.com/brand/logo_watermark_dark.png">
+      <img alt="RudderStack" width="512" src="https://cdn.rudderlabs.com/brand/logo_watermark_light.png">
+    </picture>
+  </a>
+</p>
+
 # RudderIntegrationCleverTap
 
 RudderStack Swift SDK device mode integration for CleverTap.
@@ -9,13 +18,13 @@ RudderStack Swift SDK device mode integration for CleverTap.
 Add the following dependency to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/rudderlabs/integration-swift-clevertap.git", .upToNextMajor(from: "1.0.0"))
+.package(url: "https://github.com/rudderlabs/integration-swift-clevertap.git", .upToNextMajor(from: "<latest_version>"))
 ```
 
 Or add it via Xcode:
 1. Go to **File > Add Package Dependencies**
 2. Enter the repository URL: `https://github.com/rudderlabs/integration-swift-clevertap`
-3. Select **Up to Next Major Version** from `1.0.0`
+3. Select **Up to Next Major Version** from the latest release
 
 ## Usage
 
@@ -45,6 +54,29 @@ RSSAnalytics *analytics = [[RSSAnalytics alloc] initWithConfiguration:[builder b
 RSSCleverTapIntegration *cleverTapIntegration = [[RSSCleverTapIntegration alloc] init];
 [analytics addPlugin:cleverTapIntegration];
 ```
+
+## Lite mode
+
+In lite mode, your app initialises CleverTap and passes the instance to the integration. The integration then only
+maps events and sends them to that instance.
+
+1. Set up CleverTap as CleverTap's iOS guide describes: the account credentials in `Info.plist`, and
+   `CleverTap.autoIntegrate()` in `application(_:didFinishLaunchingWithOptions:)`.
+2. Pass the CleverTap instance to the integration:
+
+```swift
+if let cleverTap = CleverTap.sharedInstance() {
+    analytics.add(plugin: CleverTapIntegration(cleverTap: cleverTap))
+}
+```
+
+In Objective-C, use `[[RSSCleverTapIntegration alloc] initWithCleverTap:cleverTap]`.
+
+In lite mode, the integration:
+
+- Does not set the CleverTap credentials or debug level, and does not notify CleverTap of the application launch.
+- Waits for the source config before it sends events. The dashboard credentials are not used, so they can hold any
+  value.
 
 ## Dashboard configuration
 
