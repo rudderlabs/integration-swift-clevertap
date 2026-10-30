@@ -55,16 +55,25 @@ RSSCleverTapIntegration *cleverTapIntegration = [[RSSCleverTapIntegration alloc]
 [analytics addPlugin:cleverTapIntegration];
 ```
 
-## Lite mode
+## Use your own CleverTap instance
 
-In lite mode, your app initialises CleverTap and passes the instance to the integration. The integration then only
-maps events and sends them to that instance.
+In the default setup, the integration initializes CleverTap from the destination configuration. Instead, your app can
+set up CleverTap and pass that instance to the integration. The integration then only maps events and sends them to
+your instance. This needs integration version 2.0.0 or higher.
 
-1. Set up CleverTap as CleverTap's iOS guide describes: the account credentials in `Info.plist`, and
-   `CleverTap.autoIntegrate()` in `application(_:didFinishLaunchingWithOptions:)`.
-2. Pass the CleverTap instance to the integration:
+1. Add the CleverTap iOS SDK to your app target. Use the package `https://github.com/CleverTap/clevertap-ios-sdk.git`,
+   the product `CleverTapSDK`, and a version in the range `[7.8.1, 8.0.0)`.
+2. Add your CleverTap account ID and account token to `Info.plist`, with the keys `CleverTapAccountID` and
+   `CleverTapToken`. If your account uses a region, also add `CleverTapRegion`.
+3. In `application(_:didFinishLaunchingWithOptions:)`, set up CleverTap. Then pass the instance to the integration:
 
 ```swift
+import CleverTapSDK
+import RudderStackAnalytics
+import RudderIntegrationCleverTap
+
+CleverTap.autoIntegrate()
+
 if let cleverTap = CleverTap.sharedInstance() {
     analytics.add(plugin: CleverTapIntegration(cleverTap: cleverTap))
 }
@@ -72,11 +81,17 @@ if let cleverTap = CleverTap.sharedInstance() {
 
 In Objective-C, use `[[RSSCleverTapIntegration alloc] initWithCleverTap:cleverTap]`.
 
-In lite mode, the integration:
+You can also pass an instance that you create with your own `CleverTapInstanceConfig`. In the default setup, the
+integration always uses the default CleverTap instance.
 
-- Does not set the CleverTap credentials or debug level, and does not notify CleverTap of the application launch.
-- Waits for the source config before it sends events. The dashboard credentials are not used, so they can hold any
-  value.
+With your own instance, the integration:
+
+- Doesn't set the CleverTap credentials or the debug level, and doesn't notify CleverTap of the app launch.
+- Waits for the source configuration before it sends events.
+
+The **Account ID** and **Account Token** connection settings still need a value. The integration doesn't use them.
+For the default instance, the `Info.plist` entries decide the account. For an instance from `CleverTapInstanceConfig`,
+that config decides the account. `CleverTap.sharedInstance()` returns only the default instance.
 
 ## Dashboard configuration
 
