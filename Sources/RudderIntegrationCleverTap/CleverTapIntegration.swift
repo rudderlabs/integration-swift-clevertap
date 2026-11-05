@@ -20,8 +20,9 @@ import RudderStackAnalytics
  analytics.add(plugin: CleverTapIntegration())
  ```
 
- The initialiser without arguments initialises CleverTap from the dashboard settings. The initialiser that takes a
- `CleverTap` instance is lite mode: the app initialises CleverTap, and the integration only maps and forwards events.
+ The initializer without arguments initializes CleverTap from the dashboard settings. The initializer that takes a
+ `CleverTap` instance uses your own CleverTap instance: the app initializes CleverTap, and the integration only maps
+ and forwards events.
  */
 public class CleverTapIntegration: IntegrationPlugin, StandardIntegration {
 
@@ -50,12 +51,12 @@ public class CleverTapIntegration: IntegrationPlugin, StandardIntegration {
     }
 
     /**
-     Creates a CleverTap integration in lite mode, with a CleverTap instance that the app has already initialised.
+     Creates a CleverTap integration with your own CleverTap instance, which the app has already initialized.
 
      The integration does not set the CleverTap credentials or debug level, and does not notify CleverTap of the
      application launch. The dashboard credentials are not used.
 
-     - Parameter cleverTap: The CleverTap instance that the app initialised.
+     - Parameter cleverTap: The CleverTap instance that the app initialized.
      */
     public init(cleverTap: CleverTap) {
         self.cleverTapAdapter = DefaultCleverTapAdapter(cleverTap: cleverTap)
