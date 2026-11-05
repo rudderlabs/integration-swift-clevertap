@@ -61,10 +61,10 @@ public class ObjCCleverTapIntegration: NSObject, ObjCIntegrationPlugin, ObjCStan
     }
 
     /**
-     Initializes a new CleverTap integration instance in lite mode, with a CleverTap instance that the app has
-     already initialised.
+     Initializes a new CleverTap integration instance with your own CleverTap instance, which the app has already
+     initialized.
 
-     - Parameter cleverTap: The CleverTap instance that the app initialised.
+     - Parameter cleverTap: The CleverTap instance that the app initialized.
      */
     @objc
     public init(cleverTap: CleverTap) {

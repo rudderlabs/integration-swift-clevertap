@@ -189,12 +189,12 @@ enum CleverTapUtils {
      Reads the revenue as a number.
 
      - Parameter value: The revenue value from the event properties.
-     - Returns: The number, or `nil` when the value is not a number.
+     - Returns: The number, or `nil` when the value is not a finite number.
      */
     private static func chargedAmount(from value: Any) -> Any? {
         if value is Bool { return nil }
-        if value is NSNumber { return value }
-        if let text = value as? String, let number = Double(text) { return number }
+        if let number = value as? NSNumber { return number.doubleValue.isFinite ? value : nil }
+        if let text = value as? String, let number = Double(text), number.isFinite { return number }
         return nil
     }
 

@@ -136,9 +136,10 @@ nested trait.
 
 ### Revenue
 
-CleverTap needs a number for the `Amount` attribute. When `revenue` is not a number, the
+CleverTap needs a number for the `Amount` attribute. When `revenue` is not a finite number, the
 integration drops the amount and logs a warning. It keeps the other charge details. A numeric
-string such as `"123.45"` is valid, and CleverTap receives it as a number.
+string such as `"123.45"` is valid, and CleverTap receives it as a number. `NaN` and infinite
+values, as numbers or as strings such as `"inf"`, are not valid.
 
 ### Nested values
 
@@ -156,18 +157,13 @@ CleverTap.sharedInstance()?.setPushToken(deviceToken)
 CleverTap.sharedInstance()?.handleNotification(withData: userInfo)
 ```
 
-## Sample app
-
-The `Example` directory holds a SwiftUI sample app. Add your write key and data plane URL in
-`Example/CleverTapExampleApp.swift`, then run the `Example` scheme.
-
 ## Documentation
 
 For more information, see the [RudderStack documentation](https://www.rudderstack.com/docs/destinations/streaming-destinations/clevertap/).
 
 ## License
 
-MIT License - see [LICENSE.md](LICENSE.md) for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## Report issues / contribute
 
