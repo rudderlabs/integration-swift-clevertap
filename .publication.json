@@ -1,0 +1,105 @@
+{
+  "copiedFiles": [
+    {
+      "output": "Sources/RudderIntegrationCleverTap/CleverTapAdapter.swift",
+      "source": "Integrations/CleverTap/Sources/RudderIntegrationCleverTap/CleverTapAdapter.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationCleverTap/CleverTapIntegration.swift",
+      "source": "Integrations/CleverTap/Sources/RudderIntegrationCleverTap/CleverTapIntegration.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationCleverTap/CleverTapUtils.swift",
+      "source": "Integrations/CleverTap/Sources/RudderIntegrationCleverTap/CleverTapUtils.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationCleverTap/MainThread.swift",
+      "source": "Integrations/CleverTap/Sources/RudderIntegrationCleverTap/MainThread.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationCleverTap/ObjCCleverTapIntegration.swift",
+      "source": "Integrations/CleverTap/Sources/RudderIntegrationCleverTap/ObjCCleverTapIntegration.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationCleverTap/Version.swift",
+      "source": "Integrations/CleverTap/Sources/RudderIntegrationCleverTap/Version.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "CHANGELOG.md",
+      "source": "Integrations/CleverTap/CHANGELOG.md",
+      "transform": "copy"
+    },
+    {
+      "output": "LICENSE",
+      "source": "LICENSE",
+      "transform": "copy"
+    },
+    {
+      "output": "README.md",
+      "source": "Integrations/CleverTap/README.md",
+      "transform": "generated"
+    },
+    {
+      "output": ".github/CODEOWNERS",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": ".gitignore",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": "CONTRIBUTING.md",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": "Package.swift",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": "VERSION",
+      "source": null,
+      "transform": "generated"
+    }
+  ],
+  "fileHashes": {
+    ".github/CODEOWNERS": "b6186d483919a45be6dd29537a58adc1a5a34338ab74fcf6e9985506c18eb025",
+    ".gitignore": "6c3f21e0d020c2a3887f176d7d69e0e6456e31888e053bf9dd5d1c5c78972aeb",
+    "CHANGELOG.md": "686995732ad9f22367ef1ae9cbb56c5ae6944003937deae1115c954f0aa09d9c",
+    "CONTRIBUTING.md": "70bdb3f48af24483e15812fade78a14e2aa11f503b7e92b6faef5450bc4820c5",
+    "LICENSE": "130c075edb106634e90df2eb62cba8f7a3cb2c0e8ccec39cb168fc649684205d",
+    "Package.swift": "2ca21c6331c25306f7ab354ab021e49d6e95cced86196990b1945bec5568a98a",
+    "README.md": "09b563913d70f53b196369fa65a0339e9161d6aa50ff3ce6fa2ebf1d98440b2e",
+    "Sources/RudderIntegrationCleverTap/CleverTapAdapter.swift": "7baca401bc140804fe80624f531065f8dc8e1fd3e04b2d7791abc03593aacf0b",
+    "Sources/RudderIntegrationCleverTap/CleverTapIntegration.swift": "ddc2057c52a069e83bafd8aee567045c6c5a5b4ced180eecd0de6bee1867bf64",
+    "Sources/RudderIntegrationCleverTap/CleverTapUtils.swift": "00444ef735a5aa535f2c9f6df9f426cb97a6a8f622f25661d70fa5d84d53cdec",
+    "Sources/RudderIntegrationCleverTap/MainThread.swift": "2b4d53322b732379137455376a1b59e2a45eb293817833b0ff7f02f9065fe8d1",
+    "Sources/RudderIntegrationCleverTap/ObjCCleverTapIntegration.swift": "1c2fc6726bb317877cc2c8e14bbea2f56180588692d98b1ce04f8d23718ba918",
+    "Sources/RudderIntegrationCleverTap/Version.swift": "fdc5ae2abbe3e3f02654c5f842a41c612723e7a9c3344fa21088507899bb47e4",
+    "VERSION": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624"
+  },
+  "package": "clevertap",
+  "policies": {
+    "RudderStackAnalytics": {
+      "mode": "external",
+      "package": "swift-sdk"
+    }
+  },
+  "schemaVersion": 1,
+  "sourceCommit": "124685590839bbc099879240af80a6444760fa26",
+  "sourceRepository": "rudderlabs/rudder-monorepo-swift",
+  "targetClosure": [
+    "RudderStackAnalytics",
+    "RudderIntegrationCleverTap"
+  ],
+  "version": "2.0.0"
+}
