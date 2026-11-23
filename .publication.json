@@ -74,18 +74,18 @@
   "fileHashes": {
     ".github/CODEOWNERS": "b6186d483919a45be6dd29537a58adc1a5a34338ab74fcf6e9985506c18eb025",
     ".gitignore": "6c3f21e0d020c2a3887f176d7d69e0e6456e31888e053bf9dd5d1c5c78972aeb",
-    "CHANGELOG.md": "3278853d3eb0f91c858b93301aca11cb820f717d270b88f78d04cd63e0aaa20f",
-    "CONTRIBUTING.md": "70bdb3f48af24483e15812fade78a14e2aa11f503b7e92b6faef5450bc4820c5",
+    "CHANGELOG.md": "afbe41090a5bb5d259900da6c67ea7e088d75579d29156a0cb3de4effad4c831",
+    "CONTRIBUTING.md": "16cc37a206bc8ff87fd01913e4f94e45c254beb5b3b3602e791a8ee0014f87ae",
     "LICENSE": "130c075edb106634e90df2eb62cba8f7a3cb2c0e8ccec39cb168fc649684205d",
-    "Package.swift": "2ca21c6331c25306f7ab354ab021e49d6e95cced86196990b1945bec5568a98a",
-    "README.md": "834bd626ffcc89b13ecad1ecbedf4959a76ded0fe5f9e07e85424e36b6524c7a",
+    "Package.swift": "220ece422c677393ea123f2974d4ed65bc6d9e685b594b58e95044a72a22e446",
+    "README.md": "556e590497901e4409074ee0280c8eb6b035470fd9f57fdad2a4a0189d2799a4",
     "Sources/RudderIntegrationCleverTap/CleverTapAdapter.swift": "f1884d7cce320a8cc31e9bf06bd35c6e156f1fd99da06efd2d6ea06e78623e8e",
-    "Sources/RudderIntegrationCleverTap/CleverTapIntegration.swift": "b388991cf01e3f6d9f3df614127e92faac72be67f139585473631992068f9a35",
+    "Sources/RudderIntegrationCleverTap/CleverTapIntegration.swift": "1ba7634a78509977c50af88f07e7541bd9b893d58c1c0367f58dd372d0f6fdda",
     "Sources/RudderIntegrationCleverTap/CleverTapUtils.swift": "465189270ab958ebfefa2c131c18ec35e8a7bd456ddf24c0c52ab3446ceff544",
     "Sources/RudderIntegrationCleverTap/MainThread.swift": "2b4d53322b732379137455376a1b59e2a45eb293817833b0ff7f02f9065fe8d1",
     "Sources/RudderIntegrationCleverTap/ObjCCleverTapIntegration.swift": "bf69049a18fffce11aa08c59e9de49cd78c2d8ad706319999e451f1d79d80100",
-    "Sources/RudderIntegrationCleverTap/Version.swift": "640803fd684fad46f454c21b71ded53317c840b4006401cdb44b224638f2b816",
-    "VERSION": "fe840f52fb5578d3f77eb497115eb02c6036601c3a53e60df7995c7276baa77a"
+    "Sources/RudderIntegrationCleverTap/Version.swift": "8c0b576d6a3d5d5108c91588a2d63e0d9fd2a952d1d4faa5543171232678135a",
+    "VERSION": "c89b87c262e9d5ffd20e73aac74a1772adcc9f5a21682cc33adcf5086e5fef5c"
   },
   "package": "clevertap",
   "policies": {
@@ -95,11 +95,11 @@
     }
   },
   "schemaVersion": 1,
-  "sourceCommit": "0a2601d8c323c382d8b2522b227b51fe829e444c",
+  "sourceCommit": "6b0aa65335e87d183abfdfd768f8371f510b7477",
   "sourceRepository": "rudderlabs/rudder-monorepo-swift",
   "targetClosure": [
     "RudderStackAnalytics",
     "RudderIntegrationCleverTap"
   ],
-  "version": "2.0.1"
+  "version": "2.1.0"
 }

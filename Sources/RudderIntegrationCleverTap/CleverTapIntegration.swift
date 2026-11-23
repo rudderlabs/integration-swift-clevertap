@@ -101,7 +101,7 @@ public class CleverTapIntegration: IntegrationPlugin, StandardIntegration {
         }
 
         cleverTapAdapter.notifyApplicationLaunched()
-        cleverTapAdapter.setDebugLevel(LoggerAnalytics.logLevel)
+        cleverTapAdapter.setDebugLevel(analytics?.configuration.logLevel ?? LogLevel.none)
 
         // CleverTap returns no instance when it rejects the credentials. Report the failure, so
         // the SDK does not mark the destination ready and then drop every event.
